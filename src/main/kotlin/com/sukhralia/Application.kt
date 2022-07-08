@@ -3,6 +3,8 @@ package com.sukhralia
 import com.sukhralia.features.app.rest.setupHealthRoutes
 import com.sukhralia.features.auth.data.repository.AuthMongoRepository
 import com.sukhralia.features.auth.rest.routes.setupAuthRoutes
+import com.sukhralia.features.place.data.repository.PlacesMongoRepository
+import com.sukhralia.features.place.rest.routes.setupPlaceRoutes
 import com.sukhralia.plugins.configureMonitoring
 import com.sukhralia.plugins.configureRouting
 import com.sukhralia.plugins.configureSecurity
@@ -28,6 +30,7 @@ fun Application.module() {
     val hashingService = SHA256HashingService()
     val tokenService = JwtTokenService()
     val authRepository = AuthMongoRepository()
+    val placeRepository = PlacesMongoRepository()
 
     //Plugins
     configureMonitoring()
@@ -43,4 +46,5 @@ fun Application.module() {
         tokenConfig = tokenConfig,
         authRepository = authRepository
     )
+    setupPlaceRoutes(placeRepository)
 }
