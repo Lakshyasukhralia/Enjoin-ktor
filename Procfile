@@ -1,0 +1,1 @@
+web: build/install/com.sukhralia.enjoin/bin/com.sukhralia.enjoin

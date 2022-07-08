@@ -6,7 +6,7 @@ import com.sukhralia.features.place.data.models.toPlace
 import com.sukhralia.features.place.domain.models.Place
 import com.sukhralia.features.place.domain.repository.PlaceRepository
 
-class PlacesMongoRepository : PlaceRepository {
+class PlaceMongoRepository : PlaceRepository {
 
     private val collection = MongoDatabase.database.getCollection<PlaceMongo>()
 
