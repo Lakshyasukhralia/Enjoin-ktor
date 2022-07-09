@@ -1,7 +1,9 @@
 package com.sukhralia
 
 import com.sukhralia.features.app.rest.setupHealthRoutes
+import com.sukhralia.features.auth.data.repository.AuthMongoRepository
 import com.sukhralia.features.auth.rest.routes.setupAuthRoutes
+import com.sukhralia.features.place.data.repository.PlaceMongoRepository
 import com.sukhralia.features.place.rest.routes.setupPlaceRoutes
 import com.sukhralia.plugins.*
 import com.sukhralia.security.hashing.SHA256HashingService
@@ -25,8 +27,11 @@ fun Application.module() {
     val hashingService = SHA256HashingService()
     val tokenService = JwtTokenService()
 
+    val authRepository = AuthMongoRepository()
+    val placeRepository = PlaceMongoRepository()
+
     //Todo:- Only able to inject repo dependencies through koin, not sure if library issue (maybe try kodein)
-    configureDependencyInjection()
+//    configureDependencyInjection()
 
     //Plugins
     configureMonitoring()
@@ -39,7 +44,8 @@ fun Application.module() {
     setupAuthRoutes(
         hashingService = hashingService,
         tokenService = tokenService,
-        tokenConfig = tokenConfig
+        tokenConfig = tokenConfig,
+        authRepository = authRepository
     )
-    setupPlaceRoutes()
+    setupPlaceRoutes(placeRepository)
 }

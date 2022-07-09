@@ -48,5 +48,5 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.6.10")
     implementation("org.litote.kmongo:kmongo-coroutine:$kmongo_version")
     implementation("commons-codec:commons-codec:$commons_codec_version")
-    implementation("io.insert-koin:koin-ktor:$koin_version")
+//    implementation("io.insert-koin:koin-ktor:$koin_version")
 }

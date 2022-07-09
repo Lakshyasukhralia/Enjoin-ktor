@@ -19,14 +19,11 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.apache.commons.codec.digest.DigestUtils
-import org.koin.ktor.ext.inject
 
 fun Application.setupAuthRoutes(
     hashingService: HashingService, tokenService: TokenService,
-    tokenConfig: TokenConfig
+    tokenConfig: TokenConfig, authRepository: AuthRepository
 ) {
-
-    val authRepository: AuthRepository by inject()
 
     routing {
 
