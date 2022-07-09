@@ -1,7 +1,7 @@
 package com.sukhralia.features.place.data.models
 
 import com.sukhralia.features.place.domain.models.Place
-import kotlinx.serialization.Serializable
+import com.sukhralia.features.place.rest.models.PlaceResponse
 import org.bson.codecs.pojo.annotations.BsonId
 import org.litote.kmongo.Id
 
@@ -13,15 +13,13 @@ data class PlaceMongo(
     val type: String
 )
 
-@Serializable
 data class Geometry(
     val coordinates: List<Double>,
     val type: String
 )
 
-@Serializable
 data class Properties(
-    val address_line1: String?,
+    val address_line1: String?, //Todo:- BsonProperty is now working, find alternate
     val address_line2: String?,
     val categories: List<String>?,
     val city: String?,
@@ -44,7 +42,6 @@ data class Properties(
     val suburb: String?
 )
 
-@Serializable
 data class Datasource(
     val attribution: String?,
     val license: String?,
@@ -54,6 +51,9 @@ data class Datasource(
 
 fun PlaceMongo.toPlace(): Place {
     return Place(
-        geometry, properties, type
+        name = properties.name,
+        address = properties.address_line2,
+        coordinates = geometry.coordinates,
+        categories = properties.categories
     )
 }

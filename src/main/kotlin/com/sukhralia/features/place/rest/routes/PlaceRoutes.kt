@@ -2,6 +2,7 @@ package com.sukhralia.features.place.rest.routes
 
 import com.sukhralia.features.place.domain.models.toResponse
 import com.sukhralia.features.place.domain.repository.PlaceRepository
+import com.sukhralia.features.place.domain.usecase.EnrichedPlacesUseCase
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -28,8 +29,10 @@ fun Application.setupPlaceRoutes(placeRepository: PlaceRepository) {
                         return@get
                     }
 
-                    val places = placeRepository.getNearbyPlacesByCoordinates(latitude.toDouble(), longitude.toDouble())
-                    call.respond(places!!.map { it.toResponse() })
+                    val enrichedPlacesUseCase = EnrichedPlacesUseCase(placeRepository)
+                    val enrichedPlaces = enrichedPlacesUseCase(latitude.toDouble(), longitude.toDouble())
+
+                    call.respond(enrichedPlaces.map { it.toResponse() })
                 }
 
             }
