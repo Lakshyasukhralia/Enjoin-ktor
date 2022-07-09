@@ -2,6 +2,8 @@ package com.sukhralia.features.auth.rest.routes
 
 import com.sukhralia.features.auth.domain.models.UserAuth
 import com.sukhralia.features.auth.domain.repository.AuthRepository
+import com.sukhralia.features.auth.domain.usecase.CreateUserUseCase
+import com.sukhralia.features.auth.domain.usecase.GetUserByEmailUseCase
 import com.sukhralia.features.auth.rest.models.AuthRequest
 import com.sukhralia.features.auth.rest.models.AuthResponse
 import com.sukhralia.security.hashing.HashingService
@@ -17,11 +19,14 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.apache.commons.codec.digest.DigestUtils
+import org.koin.ktor.ext.inject
 
 fun Application.setupAuthRoutes(
     hashingService: HashingService, tokenService: TokenService,
-    tokenConfig: TokenConfig, authRepository: AuthRepository
+    tokenConfig: TokenConfig
 ) {
+
+    val authRepository: AuthRepository by inject()
 
     routing {
 
@@ -46,7 +51,10 @@ fun Application.setupAuthRoutes(
                     password = saltedHash.hash,
                     salt = saltedHash.salt
                 )
-                val wasAcknowledged = authRepository.insertUser(userAuth)
+
+                val createUserUseCase = CreateUserUseCase(authRepository)
+
+                val wasAcknowledged = createUserUseCase(userAuth)
                 if (!wasAcknowledged) {
                     call.respond(HttpStatusCode.Conflict)
                     return@post
@@ -61,7 +69,9 @@ fun Application.setupAuthRoutes(
                     return@post
                 }
 
-                val user = authRepository.getUserByEmail(request.email)
+                val getUserByEmailUseCase = GetUserByEmailUseCase(authRepository)
+
+                val user = getUserByEmailUseCase(request.email)
                 if (user == null) {
                     call.respond(HttpStatusCode.Conflict, "Incorrect username or password")
                     return@post

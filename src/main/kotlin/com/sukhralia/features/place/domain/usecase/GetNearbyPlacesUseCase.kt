@@ -5,7 +5,7 @@ import com.sukhralia.features.place.domain.repository.PlaceRepository
 import com.sukhralia.features.place.domain.models.Place
 import com.sukhralia.features.place.util.distanceInKm
 
-class EnrichedPlacesUseCase(private val placeRepository: PlaceRepository) {
+class GetNearbyPlacesUseCase(private val placeRepository: PlaceRepository) {
 
     suspend operator fun invoke(lat: Double, lon: Double): List<Place> {
         val places = placeRepository.getNearbyPlacesByCoordinates(lat, lon).map { it.toPlace() }

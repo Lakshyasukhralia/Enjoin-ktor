@@ -1,8 +1,9 @@
 package com.sukhralia.features.auth.domain.repository
 
+import com.sukhralia.features.auth.data.models.UserAuthMongo
 import com.sukhralia.features.auth.domain.models.UserAuth
 
 interface AuthRepository {
     suspend fun insertUser(userAuth: UserAuth): Boolean
-    suspend fun getUserByEmail(email: String): UserAuth?
+    suspend fun getUserByEmail(email: String): UserAuthMongo?
 }

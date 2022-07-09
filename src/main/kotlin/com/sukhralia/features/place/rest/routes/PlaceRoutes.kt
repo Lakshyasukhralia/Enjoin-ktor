@@ -2,14 +2,17 @@ package com.sukhralia.features.place.rest.routes
 
 import com.sukhralia.features.place.domain.models.toResponse
 import com.sukhralia.features.place.domain.repository.PlaceRepository
-import com.sukhralia.features.place.domain.usecase.EnrichedPlacesUseCase
+import com.sukhralia.features.place.domain.usecase.GetNearbyPlacesUseCase
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.koin.ktor.ext.inject
 
-fun Application.setupPlaceRoutes(placeRepository: PlaceRepository) {
+fun Application.setupPlaceRoutes() {
+
+    val placeRepository: PlaceRepository by inject()
 
     routing {
 
@@ -29,10 +32,10 @@ fun Application.setupPlaceRoutes(placeRepository: PlaceRepository) {
                         return@get
                     }
 
-                    val enrichedPlacesUseCase = EnrichedPlacesUseCase(placeRepository)
-                    val enrichedPlaces = enrichedPlacesUseCase(latitude.toDouble(), longitude.toDouble())
+                    val getNearbyPlacesUseCase = GetNearbyPlacesUseCase(placeRepository)
+                    val nearbyPlaces = getNearbyPlacesUseCase(latitude.toDouble(), longitude.toDouble())
 
-                    call.respond(enrichedPlaces.map { it.toResponse() })
+                    call.respond(nearbyPlaces.map { it.toResponse() })
                 }
 
             }
